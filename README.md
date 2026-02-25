@@ -2,8 +2,9 @@
 Web-API for [crafatar.com](https://crafatar.com) website that serves Minecraft avatars based on the skin for use in external applications
 
 ## Example
-```python3
-import craftar
-crafatar = crafatar.Crafatar(player_uuid="")
+```python
+from crafatar import Crafatar
+
+crafatar = Crafatar(player_uuid="")
 crafatar.get_player_avatar()
 ```
