@@ -12,38 +12,26 @@ class Crafatar:
         }
         self.player_uuid = player_uuid
 
-    def save_file(
-            self,
-            content: bytes,
-            location: str = getcwd()) -> bool:
-        with open(
-            Path(location).joinpath(f"{randint(0, 86400)}-{self.player_uuid}.png"),  mode="wb+") as file:
+    def _get(self, endpoint: str) -> bytes:
+        return self.session.get(f"{self.api}{endpoint}").content
+
+    def _save(self, content: bytes, location: str = None) -> bool:
+        path = Path(location) if location else Path(getcwd())
+        with open(path / f"{randint(0, 86400)}-{self.player_uuid}.png", "wb+") as file:
             file.write(content)
-            file.close()
         return True
 
-    def self.session.get_player_avatar(self, size: int = 100) -> bool:
-        response = self.session.get(
-            f"{self.api}/avatars/{self.player_uuid}", 
-            headers=self.headers).content
-        return self.save_file(content=response)
+    def get_player_avatar(self, size: int = 100) -> bool:
+        return self._save(self._get(f"/avatars/{self.player_uuid}?size={size}"))
 
-    def self.session.get_player_head(self) -> bool:
-        response = self.session.get(
-            f"{self.api}/renders/head/{self.player_uuid}").content
-        return self.save_file(content=response)
+    def get_player_head(self) -> bool:
+        return self._save(self._get(f"/renders/head/{self.player_uuid}"))
 
-    def self.session.get_player_body(self) -> bool:
-        response = self.session.get(
-            f"{self.api}/renders/body/{self.player_uuid}").content
-        return self.save_file(content=response)
+    def get_player_body(self) -> bool:
+        return self._save(self._get(f"/renders/body/{self.player_uuid}"))
 
-    def self.session.get_player_skin(self) -> bool:
-        response = self.session.get(
-            f"{self.api}/skins/{self.player_uuid}").content
-        return self.save_file(content=response)
+    def get_player_skin(self) -> bool:
+        return self._save(self._get(f"/skins/{self.player_uuid}"))
 
-    def self.session.get_player_cape(self) -> bool:
-        response = self.session.get(
-            f"{self.api}/capes/{self.player_uuid}").content
-        return self.save_file(content=response)
+    def get_player_cape(self) -> bool:
+        return self._save(self._get(f"/capes/{self.player_uuid}"))
